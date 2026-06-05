@@ -39,9 +39,11 @@ function ParentMessages() {
     ];
 
     localStorage.setItem(
-      "parentMessages",
-      JSON.stringify(updatedMessages)
-    );
+  "messages",
+  JSON.stringify(updatedMessages)
+);
+
+window.dispatchEvent(new Event("dashboardUpdate"));
 
     setMessages(updatedMessages);
     setMessage("");

@@ -79,10 +79,42 @@ const defaultChats = [
 ];
 
 function TeacherMessages() {
-  const [chats, setChats] = useState(() => {
-    const saved = localStorage.getItem("teacherMessages");
-    return saved ? JSON.parse(saved) : defaultChats;
-  });
+  
+const [chats, setChats] = useState(() => {
+  const saved = localStorage.getItem("teacherMessages");
+  return saved ? JSON.parse(saved) : defaultChats;
+});
+
+useEffect(() => {
+  const parentMessages =
+    JSON.parse(localStorage.getItem("messages")) || [];
+
+  if (parentMessages.length > 0) {
+    setChats((prev) => {
+      const otherChats = prev.filter((chat) => chat.id !== 999);
+
+      return [
+        {
+          id: 999,
+          name: "Parent",
+          role: "Parent",
+          student: "Student",
+          unread: parentMessages.length,
+          lastMessage: parentMessages[parentMessages.length - 1]?.text || "",
+          messages: parentMessages.map((msg) => ({
+            id: msg.id,
+            sender: msg.sender === "Parent" ? "parent" : "teacher",
+            text: msg.text,
+            time: msg.date,
+          })),
+        },
+        ...otherChats,
+      ];
+    });
+  }
+}, []);
+
+
 
   const [selectedChatId, setSelectedChatId] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
