@@ -20,6 +20,7 @@ const defaultStudents = [
     className: "5",
     section: "A",
     parent: "Ravi Kumar",
+    parentEmail: "ravi@example.com",
     phone: "9876543210",
     email: "",
     address: "",
@@ -59,6 +60,7 @@ const emptyStudentForm = {
   className: "",
   section: "",
   parent: "",
+  parentEmail: "",
   phone: "",
   email: "",
   address: "",
@@ -101,9 +103,9 @@ function UserManagement() {
   });
 
   const [parents, setParents] = useState(() => {
-  const saved = localStorage.getItem("parents");
-  return saved ? JSON.parse(saved) : defaultParents;
-});
+    const saved = localStorage.getItem("parents");
+    return saved ? JSON.parse(saved) : defaultParents;
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -115,6 +117,7 @@ function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [classFilter, setClassFilter] = useState("All Grades");
   const [statusFilter, setStatusFilter] = useState("All Status");
+  const [commonSearch, setCommonSearch] = useState("");
 
   useEffect(() => {
     if (location.state?.openAddStudent) {
@@ -136,10 +139,22 @@ function UserManagement() {
     window.dispatchEvent(new Event("dashboardUpdate"));
   }, [staff]);
 
-useEffect(() => {
-  localStorage.setItem("parents", JSON.stringify(parents));
-  window.dispatchEvent(new Event("dashboardUpdate"));
-}, [parents]);
+  useEffect(() => {
+    localStorage.setItem("parents", JSON.stringify(parents));
+    window.dispatchEvent(new Event("dashboardUpdate"));
+  }, [parents]);
+
+  useEffect(() => {
+    const handleCommonSearch = (e) => {
+      setCommonSearch(e.detail.toLowerCase());
+    };
+
+    window.addEventListener("commonSearch", handleCommonSearch);
+
+    return () => {
+      window.removeEventListener("commonSearch", handleCommonSearch);
+    };
+  }, []);
 
   const addDashboardActivity = (message) => {
     const oldActivities =
@@ -163,57 +178,50 @@ useEffect(() => {
     setParentForm({ ...emptyParentForm });
   };
 
-  const openAddModal = () => {
-    setEditingId(null);
-    setStudentForm({ ...emptyStudentForm });
-    setStaffForm({ ...emptyStaffForm });
-    setParentForm({ ...emptyParentForm });
+  const openEditModal = (item) => {
+    setEditingId(item.id);
+
+    if (activeTab === "students") {
+      setStudentForm({
+        name: item.name || "",
+        rollNo: item.rollNo || "",
+        className: item.className || "",
+        section: item.section || "",
+        parent: item.parent || "",
+        parentEmail: item.parentEmail || "",
+        phone: item.phone || "",
+        email: item.email || "",
+        address: item.address || "",
+        status: item.status || "Active",
+        photo: item.photo || "",
+      });
+    }
+
+    if (activeTab === "staff") {
+      setStaffForm({
+        name: item.name || "",
+        employeeId: item.employeeId || "",
+        department: item.department || "",
+        role: item.role || "",
+        phone: item.phone || "",
+        email: item.email || "",
+        status: item.status || "Active",
+      });
+    }
+
+    if (activeTab === "parents") {
+      setParentForm({
+        name: item.name || "",
+        student: item.student || "",
+        relation: item.relation || "",
+        phone: item.phone || "",
+        email: item.email || "",
+        status: item.status || "Active",
+      });
+    }
+
     setShowModal(true);
   };
-
- const openEditModal = (item) => {
-  setEditingId(item.id);
-
-  if (activeTab === "students") {
-    setStudentForm({
-      name: item.name || "",
-      rollNo: item.rollNo || "",
-      className: item.className || "",
-      section: item.section || "",
-      parent: item.parent || "",
-      phone: item.phone || "",
-      email: item.email || "",
-      address: item.address || "",
-      status: item.status || "Active",
-      photo: item.photo || "",
-    });
-  }
-
-  if (activeTab === "staff") {
-    setStaffForm({
-      name: item.name || "",
-      employeeId: item.employeeId || "",
-      department: item.department || "",
-      role: item.role || "",
-      phone: item.phone || "",
-      email: item.email || "",
-      status: item.status || "Active",
-    });
-  }
-
-  if (activeTab === "parents") {
-    setParentForm({
-      name: item.name || "",
-      student: item.student || "",
-      relation: item.relation || "",
-      phone: item.phone || "",
-      email: item.email || "",
-      status: item.status || "Active",
-    });
-  }
-
-  setShowModal(true);
-};
 
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
@@ -231,42 +239,65 @@ useEffect(() => {
     reader.readAsDataURL(file);
   };
 
-  const createParentFromStudent = (student) => {
-    if (!student.parent || !student.phone) return;
+const createParentFromStudent = (student) => {
+  if (!student.parent || !student.phone) return;
 
-    const alreadyExists = parents.some(
+  setParents((prevParents) => {
+    const existingParent = prevParents.find(
       (parent) =>
-        parent.name.toLowerCase() === student.parent.toLowerCase() ||
-        parent.phone === student.phone
+        parent.phone === student.phone ||
+        parent.name?.toLowerCase() === student.parent?.toLowerCase()
     );
 
-    if (alreadyExists) return;
+    if (existingParent) {
+      return prevParents.map((parent) =>
+        parent.id === existingParent.id
+          ? {
+              ...parent,
+              name: student.parent,
+              phone: student.phone,
+              email: student.parentEmail || parent.email,
+              student: parent.student?.includes(student.name)
+                ? parent.student
+                : `${parent.student}, ${student.name}`,
+              status: "Active",
+            }
+          : parent
+      );
+    }
 
     const newParent = {
-      id: Date.now() + 1,
+      id: Date.now() + Math.random(),
       name: student.parent,
       student: student.name,
       relation: "Parent",
       phone: student.phone,
-      email: student.email || "",
+      email: student.parentEmail || "",
       status: "Active",
     };
 
-    setParents((prev) => [newParent, ...prev]);
-    addDashboardActivity(`${student.parent} added as parent`);
-  };
+    return [newParent, ...prevParents];
+  });
+
+  window.dispatchEvent(new Event("dashboardUpdate"));
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (activeTab === "students") {
       if (editingId) {
+        const updatedStudent = {
+          id: editingId,
+          ...studentForm,
+        };
+
         setStudents((prev) =>
-          prev.map((item) =>
-            item.id === editingId ? { ...item, ...studentForm } : item
-          )
+          prev.map((item) => (item.id === editingId ? updatedStudent : item))
         );
 
+        createParentFromStudent(updatedStudent);
         addDashboardActivity(`${studentForm.name} details updated`);
       } else {
         const newStudent = {
@@ -276,6 +307,7 @@ useEffect(() => {
 
         setStudents((prev) => [newStudent, ...prev]);
         createParentFromStudent(newStudent);
+
         addDashboardActivity(
           `${studentForm.name} admitted to Grade ${studentForm.className}`
         );
@@ -347,18 +379,23 @@ useEffect(() => {
   };
 
   const filteredStudents = students.filter((student) => {
-    const keyword = searchTerm.toLowerCase().trim();
+    const keyword = (searchTerm || commonSearch).toLowerCase().trim();
 
     const matchesSearch =
       keyword === "" ||
       student.name?.toLowerCase().includes(keyword) ||
       student.rollNo?.toLowerCase().includes(keyword) ||
       student.parent?.toLowerCase().includes(keyword) ||
-      student.phone?.includes(keyword);
-      const matchesClass =
-        classFilter === "All Grades" ||
-        student.className === classFilter ||
-        student.className?.startsWith(classFilter);
+      student.phone?.includes(keyword) ||
+      student.email?.toLowerCase().includes(keyword) ||
+      String(student.className || "").toLowerCase().includes(keyword) ||
+      student.section?.toLowerCase().includes(keyword);
+
+    const matchesClass =
+      classFilter === "All Grades" ||
+      String(student.className) === classFilter ||
+      String(student.className) === classFilter.replace("Grade ", "");
+
     const matchesStatus =
       statusFilter === "All Status" || student.status === statusFilter;
 
@@ -366,15 +403,16 @@ useEffect(() => {
   });
 
   const filteredStaff = staff.filter((item) => {
-    const keyword = searchTerm.toLowerCase().trim();
+    const keyword = (searchTerm || commonSearch).toLowerCase().trim();
 
     const matchesSearch =
       keyword === "" ||
-      item.name.toLowerCase().includes(keyword) ||
-      item.employeeId.toLowerCase().includes(keyword) ||
-      item.department.toLowerCase().includes(keyword) ||
-      item.role.toLowerCase().includes(keyword) ||
-      item.phone.includes(keyword);
+      item.name?.toLowerCase().includes(keyword) ||
+      item.employeeId?.toLowerCase().includes(keyword) ||
+      item.department?.toLowerCase().includes(keyword) ||
+      item.role?.toLowerCase().includes(keyword) ||
+      item.phone?.includes(keyword) ||
+      item.email?.toLowerCase().includes(keyword);
 
     const matchesStatus =
       statusFilter === "All Status" || item.status === statusFilter;
@@ -383,14 +421,15 @@ useEffect(() => {
   });
 
   const filteredParents = parents.filter((item) => {
-    const keyword = searchTerm.toLowerCase().trim();
+    const keyword = (searchTerm || commonSearch).toLowerCase().trim();
 
     const matchesSearch =
       keyword === "" ||
-      item.name.toLowerCase().includes(keyword) ||
-      item.student.toLowerCase().includes(keyword) ||
-      item.phone.includes(keyword) ||
-      item.email.toLowerCase().includes(keyword);
+      item.name?.toLowerCase().includes(keyword) ||
+      item.student?.toLowerCase().includes(keyword) ||
+      item.relation?.toLowerCase().includes(keyword) ||
+      item.phone?.includes(keyword) ||
+      item.email?.toLowerCase().includes(keyword);
 
     const matchesStatus =
       statusFilter === "All Status" || item.status === statusFilter;
@@ -413,21 +452,21 @@ useEffect(() => {
           </button>
 
           <button
-  type="button"
-  className="add-btn"
-  onClick={() => {
-    setEditingId(null);
-    setStudentForm({ ...emptyStudentForm });
-    setStaffForm({ ...emptyStaffForm });
-    setParentForm({ ...emptyParentForm });
-    setShowModal(true);
-  }}
->
-  <FaPlus />
-  {activeTab === "students" && "Add Student"}
-  {activeTab === "staff" && "Add Staff"}
-  {activeTab === "parents" && "Add Parent"}
-</button>
+            type="button"
+            className="add-btn"
+            onClick={() => {
+              setEditingId(null);
+              setStudentForm({ ...emptyStudentForm });
+              setStaffForm({ ...emptyStaffForm });
+              setParentForm({ ...emptyParentForm });
+              setShowModal(true);
+            }}
+          >
+            <FaPlus />
+            {activeTab === "students" && "Add Student"}
+            {activeTab === "staff" && "Add Staff"}
+            {activeTab === "parents" && "Add Parent"}
+          </button>
         </div>
       </div>
 
@@ -467,20 +506,22 @@ useEffect(() => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-          {activeTab === "students" && (
-            <select
-              value={classFilter}
-              onChange={(e) => setClassFilter(e.target.value)}
-            >
-              <option value="All Grades">All Grades</option>
 
-              {Array.from({ length: 10 }, (_, i) => (
-                <option key={i + 1} value={`Grade ${i + 1}`}>
-                  Grade {i + 1}
-                </option>
-              ))}
-            </select>
-          )}
+        {activeTab === "students" && (
+          <select
+            value={classFilter}
+            onChange={(e) => setClassFilter(e.target.value)}
+          >
+            <option value="All Grades">All Grades</option>
+
+            {Array.from({ length: 10 }, (_, i) => (
+              <option key={i + 1} value={`Grade ${i + 1}`}>
+                Grade {i + 1}
+              </option>
+            ))}
+          </select>
+        )}
+
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
@@ -625,10 +666,16 @@ useEffect(() => {
                     </td>
                     <td>
                       <div className="action-icons">
-                        <button type="button" onClick={() => openEditModal(item)}>
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(item)}
+                        >
                           <FaEdit />
                         </button>
-                        <button type="button" onClick={() => handleDelete(item.id)}>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(item.id)}
+                        >
                           <FaTrash />
                         </button>
                       </div>
@@ -691,10 +738,16 @@ useEffect(() => {
                     </td>
                     <td>
                       <div className="action-icons">
-                        <button type="button" onClick={() => openEditModal(item)}>
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(item)}
+                        >
                           <FaEdit />
                         </button>
-                        <button type="button" onClick={() => handleDelete(item.id)}>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(item.id)}
+                        >
                           <FaTrash />
                         </button>
                       </div>
@@ -713,7 +766,7 @@ useEffect(() => {
         </div>
       )}
 
-      {showModal ? (
+      {showModal && (
         <div className="modal-overlay">
           <div className="student-modal">
             <div className="modal-header">
@@ -800,7 +853,7 @@ useEffect(() => {
                         required
                       >
                         <option value="">Select Grade</option>
-                        {[1, 2, 3, 4, 5, 6, 7, 8,9,10].map((grade) => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((grade) => (
                           <option key={grade} value={grade}>
                             Grade {grade}
                           </option>
@@ -882,6 +935,21 @@ useEffect(() => {
                           })
                         }
                         required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Parent Email</label>
+                      <input
+                        type="email"
+                        value={studentForm.parentEmail}
+                        onChange={(e) =>
+                          setStudentForm({
+                            ...studentForm,
+                            parentEmail: e.target.value,
+                          })
+                        }
+                        placeholder="parent@school.com"
                       />
                     </div>
 
@@ -1092,7 +1160,7 @@ useEffect(() => {
             </form>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

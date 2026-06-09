@@ -7,44 +7,39 @@ function ParentMessages() {
   const [messages, setMessages] = useState([]);
 
   const loadMessages = () => {
-    setMessages(
-      JSON.parse(localStorage.getItem("parentMessages")) || []
-    );
+    setMessages(JSON.parse(localStorage.getItem("messages")) || []);
   };
 
   useEffect(() => {
     loadMessages();
 
     window.addEventListener("dashboardUpdate", loadMessages);
+    window.addEventListener("storage", loadMessages);
 
     return () => {
       window.removeEventListener("dashboardUpdate", loadMessages);
+      window.removeEventListener("storage", loadMessages);
     };
   }, []);
 
   const sendMessage = () => {
     if (!message.trim()) return;
 
+    const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+
     const newMessage = {
       id: Date.now(),
       sender: "Parent",
       receiver: "Teacher",
-      text: message,
+      parentEmail: currentUser.email || "parent@school.com",
+      text: message.trim(),
       date: new Date().toLocaleString(),
     };
 
-    const updatedMessages = [
-      newMessage,
-      ...messages,
-    ];
+    const oldMessages = JSON.parse(localStorage.getItem("messages")) || [];
+    const updatedMessages = [newMessage, ...oldMessages];
 
-    localStorage.setItem(
-  "messages",
-  JSON.stringify(updatedMessages)
-);
-
-window.dispatchEvent(new Event("dashboardUpdate"));
-
+    localStorage.setItem("messages", JSON.stringify(updatedMessages));
     setMessages(updatedMessages);
     setMessage("");
 
@@ -59,7 +54,6 @@ window.dispatchEvent(new Event("dashboardUpdate"));
       </div>
 
       <div className="messages-card">
-
         <div className="message-input-area">
           <input
             type="text"
@@ -68,7 +62,7 @@ window.dispatchEvent(new Event("dashboardUpdate"));
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <button onClick={sendMessage}>
+          <button type="button" onClick={sendMessage}>
             <FaPaperPlane />
             Send
           </button>
@@ -90,7 +84,6 @@ window.dispatchEvent(new Event("dashboardUpdate"));
               </div>
 
               <p>{msg.text}</p>
-
               <small>{msg.date}</small>
             </div>
           ))}

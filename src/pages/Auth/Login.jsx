@@ -1,6 +1,12 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSchool, FaUserShield, FaChalkboardTeacher, FaUserFriends } from "react-icons/fa";
+import {
+  FaSchool,
+  FaUserShield,
+  FaChalkboardTeacher,
+  FaUserFriends,
+} from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
@@ -44,13 +50,24 @@ function Login() {
       return;
     }
 
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        role: role,
+        email: formData.email,
+      })
+    );
+
+    localStorage.setItem("role", role);
+    localStorage.setItem("isLoggedIn", "true");
+
     if (role === "admin") {
-  navigate("/dashboard");
-} else if (role === "teacher") {
-  navigate("/teacher-dashboard");
-} else if (role === "parent") {
-  navigate("/parent-dashboard");
-}
+      navigate("/dashboard");
+    } else if (role === "teacher") {
+      navigate("/teacher-dashboard");
+    } else if (role === "parent") {
+      navigate("/parent-dashboard");
+    }
   };
 
   return (

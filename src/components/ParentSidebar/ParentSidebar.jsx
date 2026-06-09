@@ -19,13 +19,9 @@ function ParentSidebar() {
   const menuItems = [
     { name: "Dashboard", path: "/parent-dashboard", icon: <FaTachometerAlt /> },
     { name: "Child Info", path: "/parent-child", icon: <FaUserGraduate /> },
-    { name: "Attendance", path: "/parent-attendance", icon: <FaCalendarCheck /> },
-    { name: "Marks", path: "/parent-marks", icon: <FaChartBar /> },
-    { name: "Assignments", path: "/parent-assignments", icon: <FaClipboardList /> },
+   
     { name: "Messages", path: "/parent-messages", icon: <FaComments /> },
-    { name: "Notifications", path: "/parent-notifications", icon: <FaBell /> },
-    { name: "Fees", path: "/parent-fees", icon: <FaMoneyBillWave /> },
-    { name: "Settings", path: "/parent-settings", icon: <FaCog /> },
+    
   ];
 
   const logout = () => {

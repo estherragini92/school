@@ -1,96 +1,117 @@
 import { useEffect, useState } from "react";
-import {
-  FaUserGraduate,
-  FaBirthdayCake,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaUsers,
-  FaSchool,
-} from "react-icons/fa";
+import { FaUserGraduate } from "react-icons/fa";
 import "./ParentChildInfo.css";
 
 function ParentChildInfo() {
-  const [student, setStudent] = useState(null);
+  const [children, setChildren] = useState([]);
+  const [selectedChild, setSelectedChild] = useState("All");
+
+  const loadChildren = () => {
+    const students = JSON.parse(localStorage.getItem("students")) || [];
+    setChildren(students);
+  };
 
   useEffect(() => {
-    const students = JSON.parse(localStorage.getItem("students")) || [];
+    loadChildren();
 
-    // For now show first child
-    setStudent(students[0]);
+    window.addEventListener("dashboardUpdate", loadChildren);
+    window.addEventListener("storage", loadChildren);
+
+    return () => {
+      window.removeEventListener("dashboardUpdate", loadChildren);
+      window.removeEventListener("storage", loadChildren);
+    };
   }, []);
 
-  if (!student) {
-    return (
-      <div className="parent-child-page">
-        <h2>Child Information</h2>
-        <p>No student information available.</p>
-      </div>
-    );
-  }
+  const filteredChildren =
+    selectedChild === "All"
+      ? children
+      : children.filter((child) => String(child.id) === selectedChild);
 
   return (
-    <div className="parent-child-page">
-      <div className="child-header-card">
-        <div className="child-photo">
-          {student.photo ? (
-            <img src={student.photo} alt={student.name} />
-          ) : (
-            <FaUserGraduate />
-          )}
-        </div>
-
+    <div className="parent-child-info-page">
+      <div className="page-header">
         <div>
-          <h2>{student.name}</h2>
-          <p>
-            {student.grade} - {student.section}
-          </p>
-          <p>Roll No: {student.rollNo}</p>
+          <h2>Child Information</h2>
+          <p>View your child details and academic information</p>
+        </div>
+
+        <div className="child-filter">
+          <select
+            value={selectedChild}
+            onChange={(e) => setSelectedChild(e.target.value)}
+          >
+            <option value="All">All Children</option>
+
+            {children.map((child) => (
+              <option key={child.id} value={child.id}>
+                {child.name} - Grade {child.className || child.grade || "N/A"}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      <div className="child-info-grid">
+      {filteredChildren.length > 0 ? (
+        <div className="child-grid">
+          {filteredChildren.map((child) => (
+            <div className="child-card" key={child.id}>
+              <div className="child-avatar">
+                {child.photo ? (
+                  <img src={child.photo} alt={child.name} />
+                ) : (
+                  <FaUserGraduate />
+                )}
+              </div>
 
-        <div className="child-info-card">
-          <FaSchool />
-          <div>
-            <h4>Class</h4>
-            <p>{student.grade} - {student.section}</p>
-          </div>
+              <h3>{child.name}</h3>
+
+              <div className="child-details">
+                <p>
+                  <strong>Roll No:</strong> {child.rollNo || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Grade:</strong> Grade{" "}
+                  {child.className || child.grade || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Section:</strong> {child.section || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Parent:</strong>{" "}
+                  {child.parent || child.parentName || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Parent Email:</strong>{" "}
+                  {child.parentEmail || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Phone:</strong> {child.phone || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Address:</strong> {child.address || "N/A"}
+                </p>
+
+                <p>
+                  <strong>Status:</strong> {child.status || "Active"}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
-
-        <div className="child-info-card">
-          <FaUsers />
-          <div>
-            <h4>Parent Name</h4>
-            <p>{student.parentName}</p>
-          </div>
+      ) : (
+        <div className="no-child-card">
+          <FaUserGraduate className="no-child-icon" />
+          <h3>No Child Found</h3>
+          <p>No student details available. Please add students from Admin.</p>
         </div>
-
-        <div className="child-info-card">
-          <FaPhone />
-          <div>
-            <h4>Phone Number</h4>
-            <p>{student.phone}</p>
-          </div>
-        </div>
-
-        <div className="child-info-card">
-          <FaBirthdayCake />
-          <div>
-            <h4>Date of Birth</h4>
-            <p>{student.dob}</p>
-          </div>
-        </div>
-
-        <div className="child-info-card full-width">
-          <FaMapMarkerAlt />
-          <div>
-            <h4>Address</h4>
-            <p>{student.address}</p>
-          </div>
-        </div>
-
-      </div>
+      )}
     </div>
   );
 }

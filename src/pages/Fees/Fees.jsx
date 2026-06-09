@@ -131,8 +131,9 @@ function Fees() {
   const [dueForm, setDueForm] = useState(emptyDue);
 
   useEffect(() => {
-    localStorage.setItem("feePayments", JSON.stringify(payments));
-  }, [payments]);
+  localStorage.setItem("feePayments", JSON.stringify(payments));
+  window.dispatchEvent(new Event("dashboardUpdate"));
+}, [payments]);
 
   useEffect(() => {
     localStorage.setItem("feeStructure", JSON.stringify(feeStructure));

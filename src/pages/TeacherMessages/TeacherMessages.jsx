@@ -24,106 +24,57 @@ const defaultChats = [
         text: "Good morning teacher.",
         time: "09:10 AM",
       },
-      {
-        id: 2,
-        sender: "parent",
-        text: "Can we discuss Emma's performance?",
-        time: "09:12 AM",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Marcus Johnson",
-    role: "Student",
-    student: "Marcus Johnson",
-    unread: 0,
-    lastMessage: "I submitted the assignment.",
-    messages: [
-      {
-        id: 1,
-        sender: "student",
-        text: "I submitted the assignment.",
-        time: "Yesterday",
-      },
-      {
-        id: 2,
-        sender: "teacher",
-        text: "Good. I will check it today.",
-        time: "Yesterday",
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Sophia Chen Parent",
-    role: "Parent",
-    student: "Sophia Chen",
-    unread: 1,
-    lastMessage: "Thank you for the update.",
-    messages: [
-      {
-        id: 1,
-        sender: "teacher",
-        text: "Sophia is doing very well in class.",
-        time: "10:00 AM",
-      },
-      {
-        id: 2,
-        sender: "parent",
-        text: "Thank you for the update.",
-        time: "10:20 AM",
-      },
     ],
   },
 ];
 
 function TeacherMessages() {
-  
-const [chats, setChats] = useState(() => {
-  const saved = localStorage.getItem("teacherMessages");
-  return saved ? JSON.parse(saved) : defaultChats;
-});
-
-useEffect(() => {
-  const parentMessages =
-    JSON.parse(localStorage.getItem("messages")) || [];
-
-  if (parentMessages.length > 0) {
-    setChats((prev) => {
-      const otherChats = prev.filter((chat) => chat.id !== 999);
-
-      return [
-        {
-          id: 999,
-          name: "Parent",
-          role: "Parent",
-          student: "Student",
-          unread: parentMessages.length,
-          lastMessage: parentMessages[parentMessages.length - 1]?.text || "",
-          messages: parentMessages.map((msg) => ({
-            id: msg.id,
-            sender: msg.sender === "Parent" ? "parent" : "teacher",
-            text: msg.text,
-            time: msg.date,
-          })),
-        },
-        ...otherChats,
-      ];
-    });
-  }
-}, []);
-
-
-
+  const [chats, setChats] = useState(defaultChats);
   const [selectedChatId, setSelectedChatId] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [messageText, setMessageText] = useState("");
 
+  const loadParentMessages = () => {
+    const allMessages = JSON.parse(localStorage.getItem("messages")) || [];
+
+    if (allMessages.length === 0) {
+      setChats(defaultChats);
+      return;
+    }
+
+    const parentChat = {
+      id: 999,
+      name: "Parent Messages",
+      role: "Parent",
+      student: "Parent Portal",
+      unread: allMessages.filter((msg) => msg.sender === "Parent").length,
+      lastMessage: allMessages[0]?.text || "",
+      messages: allMessages
+        .slice()
+        .reverse()
+        .map((msg) => ({
+          id: msg.id,
+          sender: msg.sender === "Teacher" ? "teacher" : "parent",
+          text: msg.text,
+          time: msg.date,
+        })),
+    };
+
+    setChats([parentChat, ...defaultChats]);
+    setSelectedChatId(999);
+  };
+
   useEffect(() => {
-    localStorage.setItem("teacherMessages", JSON.stringify(chats));
-    window.dispatchEvent(new Event("dashboardUpdate"));
-  }, [chats]);
+    loadParentMessages();
+
+    window.addEventListener("dashboardUpdate", loadParentMessages);
+    window.addEventListener("storage", loadParentMessages);
+
+    return () => {
+      window.removeEventListener("dashboardUpdate", loadParentMessages);
+      window.removeEventListener("storage", loadParentMessages);
+    };
+  }, []);
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId);
 
@@ -140,7 +91,6 @@ useEffect(() => {
 
   const selectChat = (id) => {
     setSelectedChatId(id);
-
     setChats((prev) =>
       prev.map((chat) => (chat.id === id ? { ...chat, unread: 0 } : chat))
     );
@@ -153,71 +103,24 @@ useEffect(() => {
 
     const newMessage = {
       id: Date.now(),
-      sender: "teacher",
+      sender: "Teacher",
+      receiver: "Parent",
       text: messageText.trim(),
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      date: new Date().toLocaleString(),
     };
 
-    setChats((prev) =>
-      prev.map((chat) =>
-        chat.id === selectedChatId
-          ? {
-              ...chat,
-              lastMessage: messageText.trim(),
-              messages: [...chat.messages, newMessage],
-            }
-          : chat
-      )
-    );
+    const oldMessages = JSON.parse(localStorage.getItem("messages")) || [];
+    const updatedMessages = [newMessage, ...oldMessages];
 
-    const oldNotifications =
-      JSON.parse(localStorage.getItem("notifications")) || [];
-
-    localStorage.setItem(
-      "notifications",
-      JSON.stringify([
-        {
-          id: Date.now(),
-          text: `New message sent to ${selectedChat?.name}`,
-          time: new Date().toLocaleString(),
-        },
-        ...oldNotifications,
-      ])
-    );
-
+    localStorage.setItem("messages", JSON.stringify(updatedMessages));
     setMessageText("");
+
     window.dispatchEvent(new Event("dashboardUpdate"));
+    loadParentMessages();
   };
 
   const createNewChat = () => {
-    const name = prompt("Enter parent/student name:");
-    if (!name) return;
-
-    const newChat = {
-      id: Date.now(),
-      name,
-      role: "Parent",
-      student: "New Student",
-      unread: 0,
-      lastMessage: "New conversation started",
-      messages: [
-        {
-          id: Date.now() + 1,
-          sender: "teacher",
-          text: "New conversation started",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ],
-    };
-
-    setChats((prev) => [newChat, ...prev]);
-    setSelectedChatId(newChat.id);
+    alert("Parent messages will appear automatically when parent sends message.");
   };
 
   const markAllRead = () => {
@@ -284,7 +187,9 @@ useEffect(() => {
                     {chat.unread > 0 && <span>{chat.unread}</span>}
                   </div>
 
-                  <p>{chat.role} · {chat.student}</p>
+                  <p>
+                    {chat.role} · {chat.student}
+                  </p>
                   <small>{chat.lastMessage}</small>
                 </div>
               </button>
@@ -333,7 +238,7 @@ useEffect(() => {
 
                 <input
                   type="text"
-                  placeholder="Type your message..."
+                  placeholder="Type your reply..."
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                 />

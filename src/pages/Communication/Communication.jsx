@@ -128,12 +128,6 @@ function Communication() {
     setNotifications((prev) => [newNotification, ...prev]);
   };
 
-  const openAddAnnouncement = () => {
-    setEditingId(null);
-    setAnnouncementForm({ ...emptyAnnouncement });
-    setShowAnnouncementModal(true);
-  };
-
   const openEditAnnouncement = (announcement) => {
     setEditingId(announcement.id);
 
@@ -154,29 +148,31 @@ function Communication() {
     setEditingId(null);
     setAnnouncementForm({ ...emptyAnnouncement });
   };
-const sendTeacherNotification = (announcement) => {
-  const notification = {
-    id: Date.now(),
-    title: announcement.title,
-    message: announcement.message,
-    audience: announcement.audience,
-    priority: announcement.priority,
-    type: "Announcement",
-    date: new Date().toLocaleString(),
-    read: false,
+
+  const sendTeacherNotification = (announcement) => {
+    const notification = {
+      id: Date.now(),
+      title: announcement.title,
+      message: announcement.message,
+      audience: announcement.audience,
+      priority: announcement.priority,
+      type: "Announcement",
+      date: new Date().toLocaleString(),
+      read: false,
+    };
+
+    const oldNotifications =
+      JSON.parse(localStorage.getItem("teacherNotifications")) || [];
+
+    localStorage.setItem(
+      "teacherNotifications",
+      JSON.stringify([notification, ...oldNotifications])
+    );
+
+    window.dispatchEvent(new Event("teacherNotificationUpdate"));
+    window.dispatchEvent(new Event("dashboardUpdate"));
   };
 
-  const oldNotifications =
-    JSON.parse(localStorage.getItem("teacherNotifications")) || [];
-
-  localStorage.setItem(
-    "teacherNotifications",
-    JSON.stringify([notification, ...oldNotifications])
-  );
-
-  window.dispatchEvent(new Event("teacherNotificationUpdate"));
-  window.dispatchEvent(new Event("dashboardUpdate"));
-};
   const saveAnnouncement = (e) => {
     e.preventDefault();
 
@@ -197,9 +193,7 @@ const sendTeacherNotification = (announcement) => {
 
     if (editingId) {
       setAnnouncements((prev) =>
-        prev.map((item) =>
-          item.id === editingId ? newAnnouncement : item
-        )
+        prev.map((item) => (item.id === editingId ? newAnnouncement : item))
       );
 
       addNotification(`${newAnnouncement.title} announcement updated`);
@@ -207,7 +201,8 @@ const sendTeacherNotification = (announcement) => {
       setAnnouncements((prev) => [newAnnouncement, ...prev]);
       addNotification(`${newAnnouncement.title} announcement created`);
     }
-sendTeacherNotification(newAnnouncement);
+
+    sendTeacherNotification(newAnnouncement);
     closeAnnouncementModal();
   };
 
@@ -245,6 +240,62 @@ sendTeacherNotification(newAnnouncement);
     return [];
   };
 
+  const sendBroadcastToParentMessages = (sentRecord) => {
+    const oldMessages = JSON.parse(localStorage.getItem("messages")) || [];
+
+    const parentMessages = sentRecord.recipients.map((parent, index) => ({
+      id: Date.now() + index,
+      sender: "Admin",
+      receiver: "Parent",
+      parentName: parent.name,
+      email: parent.email,
+      phone: parent.phone,
+      subject: sentRecord.subject,
+      text: sentRecord.message,
+      date: sentRecord.time,
+      type: sentRecord.type,
+    }));
+
+    localStorage.setItem(
+      "messages",
+      JSON.stringify([...parentMessages, ...oldMessages])
+    );
+
+    window.dispatchEvent(new Event("dashboardUpdate"));
+  };
+
+const sendBroadcastEmail = async (sentRecord) => {
+  try {
+    for (const parent of sentRecord.recipients) {
+      if (!parent.email) continue;
+
+      const response = await fetch(
+        "https://api.web3forms.com/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: "af9d57ed-1bc8-4484-bd58-929ebe0682e2",
+            subject: sentRecord.subject,
+            from_name: "EduSmart School",
+            name: parent.name,
+            email: parent.email,
+            message: sentRecord.message,
+          }),
+        }
+      );
+
+      const result = await response.json();
+      console.log(result);
+    }
+  } catch (error) {
+    console.error("Email error:", error);
+  }
+};
+
   const sendBroadcast = (e) => {
     e.preventDefault();
 
@@ -279,13 +330,21 @@ sendTeacherNotification(newAnnouncement);
     };
 
     setBroadcastHistory((prev) => [sentRecord, ...prev]);
+    sendBroadcastToParentMessages(sentRecord);
+
+    if (
+  broadcastForm.type === "Email" ||
+  broadcastForm.type === "Email + SMS"
+) {
+  sendBroadcastEmail(sentRecord);
+}
 
     addNotification(
       `${broadcastForm.type} broadcast sent to ${recipients.length} recipient(s)`
     );
 
     alert(
-      "Message sent successfully in frontend simulation.\n\nReal SMS needs backend + SMS API."
+      "Message sent successfully in frontend simulation.\n\nReal SMS/Email needs backend + SMS/Email API."
     );
 
     setBroadcastForm({ ...emptyBroadcast });
@@ -293,6 +352,7 @@ sendTeacherNotification(newAnnouncement);
 
   const deleteBroadcast = (id) => {
     if (!window.confirm("Delete this broadcast history?")) return;
+
     setBroadcastHistory((prev) => prev.filter((item) => item.id !== id));
   };
 
@@ -327,27 +387,27 @@ sendTeacherNotification(newAnnouncement);
           <p>Manage announcements, notifications and broadcasts</p>
         </div>
 
-       {activeTab === "announcements" && (
-  <button
-    type="button"
-    className="add-btn"
-    onClick={() => {
-      setEditingId(null);
-      setAnnouncementForm({
-        title: "",
-        audience: "All Parents",
-        priority: "Medium",
-        date: new Date().toISOString().split("T")[0],
-        status: "Published",
-        message: "",
-      });
-      setShowAnnouncementModal(true);
-    }}
-  >
-    <FaPlus />
-    New Announcement
-  </button>
-)}
+        {activeTab === "announcements" && (
+          <button
+            type="button"
+            className="add-btn"
+            onClick={() => {
+              setEditingId(null);
+              setAnnouncementForm({
+                title: "",
+                audience: "All Parents",
+                priority: "Medium",
+                date: new Date().toISOString().split("T")[0],
+                status: "Published",
+                message: "",
+              });
+              setShowAnnouncementModal(true);
+            }}
+          >
+            <FaPlus />
+            New Announcement
+          </button>
+        )}
       </div>
 
       <div className="communication-tabs">
@@ -714,135 +774,133 @@ sendTeacherNotification(newAnnouncement);
         </div>
       )}
 
-     {showAnnouncementModal && (
-  <div className="modal-overlay">
-    <div className="communication-modal">
-      <div className="modal-header">
-        <h3>{editingId ? "Edit Announcement" : "New Announcement"}</h3>
+      {showAnnouncementModal && (
+        <div className="modal-overlay">
+          <div className="communication-modal">
+            <div className="modal-header">
+              <h3>{editingId ? "Edit Announcement" : "New Announcement"}</h3>
 
-        <button
-          type="button"
-          onClick={() => setShowAnnouncementModal(false)}
-        >
-          <FaTimes />
-        </button>
-      </div>
-<form onSubmit={saveAnnouncement}>
-        <div className="form-grid">
-          <div className="form-group">
-            <label>Title</label>
-            <input
-              value={announcementForm.title}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  title: e.target.value,
-                })
-              }
-              required
-            />
-          </div>
+              <button type="button" onClick={closeAnnouncementModal}>
+                <FaTimes />
+              </button>
+            </div>
 
-          <div className="form-group">
-            <label>Audience</label>
-            <select
-              value={announcementForm.audience}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  audience: e.target.value,
-                })
-              }
-            >
-              <option>All Parents</option>
-              <option>All Students</option>
-              <option>All Teachers</option>
-              <option>Grade 5</option>
-              <option>Grade 6</option>
-              <option>Grade 7</option>
-              <option>Grade 8</option>
-            </select>
-          </div>
+            <form onSubmit={saveAnnouncement}>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    value={announcementForm.title}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        title: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
 
-          <div className="form-group">
-            <label>Priority</label>
-            <select
-              value={announcementForm.priority}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  priority: e.target.value,
-                })
-              }
-            >
-              <option>Low</option>
-              <option>Medium</option>
-              <option>High</option>
-            </select>
-          </div>
+                <div className="form-group">
+                  <label>Audience</label>
+                  <select
+                    value={announcementForm.audience}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        audience: e.target.value,
+                      })
+                    }
+                  >
+                    <option>All Parents</option>
+                    <option>All Students</option>
+                    <option>All Teachers</option>
+                    <option>Grade 5</option>
+                    <option>Grade 6</option>
+                    <option>Grade 7</option>
+                    <option>Grade 8</option>
+                  </select>
+                </div>
 
-          <div className="form-group">
-            <label>Date</label>
-            <input
-              type="date"
-              value={announcementForm.date}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  date: e.target.value,
-                })
-              }
-            />
-          </div>
+                <div className="form-group">
+                  <label>Priority</label>
+                  <select
+                    value={announcementForm.priority}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        priority: e.target.value,
+                      })
+                    }
+                  >
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
 
-          <div className="form-group">
-            <label>Status</label>
-            <select
-              value={announcementForm.status}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  status: e.target.value,
-                })
-              }
-            >
-              <option>Published</option>
-              <option>Scheduled</option>
-            </select>
-          </div>
+                <div className="form-group">
+                  <label>Date</label>
+                  <input
+                    type="date"
+                    value={announcementForm.date}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
 
-          <div className="form-group full">
-            <label>Message</label>
-            <textarea
-              value={announcementForm.message}
-              onChange={(e) =>
-                setAnnouncementForm({
-                  ...announcementForm,
-                  message: e.target.value,
-                })
-              }
-              required
-            ></textarea>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    value={announcementForm.status}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option>Published</option>
+                    <option>Scheduled</option>
+                  </select>
+                </div>
+
+                <div className="form-group full">
+                  <label>Message</label>
+                  <textarea
+                    value={announcementForm.message}
+                    onChange={(e) =>
+                      setAnnouncementForm({
+                        ...announcementForm,
+                        message: e.target.value,
+                      })
+                    }
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={closeAnnouncementModal}
+                >
+                  Cancel
+                </button>
+
+                <button type="submit" className="save-btn">
+                  Save Announcement
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-
-        <div className="modal-actions">
-          <button
-            type="button"
-            className="cancel-btn"
-            onClick={() => setShowAnnouncementModal(false)}
-          >
-            Cancel
-          </button>
-
-          <button type="submit" className="save-btn">
-            Save Announcement
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }

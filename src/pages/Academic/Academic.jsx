@@ -377,6 +377,22 @@ useEffect(() => {
 
     return matchesSearch && matchesGrade;
   });
+  const filteredMarks = marks.filter((item) => {
+  const keyword = search.toLowerCase().trim();
+
+  const matchesSearch =
+    keyword === "" ||
+    (item.examType || "").toLowerCase().includes(keyword) ||
+    (item.subject || "").toLowerCase().includes(keyword) ||
+    (item.studentName || "").toLowerCase().includes(keyword) ||
+    (item.className || "").toLowerCase().includes(keyword);
+
+  const matchesGrade =
+    gradeFilter === "All Grades" ||
+    (item.className || "").startsWith(gradeFilter);
+
+  return matchesSearch && matchesGrade;
+});
 
   const getPeriod = (day, time) => {
     return periods.find(
@@ -630,8 +646,8 @@ useEffect(() => {
 
      {activeTab === "exams" && (
   <div className="exam-list">
-    {marks.length > 0 ? (
-      marks.map((item) => (
+    {filteredMarks.length > 0 ? (
+      filteredMarks.map((item) => (
         <div className="exam-card" key={item.id}>
           <div className="exam-icon">
             <FaGraduationCap />

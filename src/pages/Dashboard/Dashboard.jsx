@@ -30,6 +30,7 @@ const { currentUser } = useAuth();
     certificates: [],
   });
 
+
   const [showNotifications, setShowNotifications] = useState(false);
 
   const loadDashboardData = () => {
@@ -122,17 +123,7 @@ if (currentUser?.role === "parent") {
         </div>
 
         <div className="dashboard-actions">
-          <button
-            className="white-action-btn"
-            onClick={() =>
-              navigate("/users", {
-              state: { openAddStudent: true },
-            })
-                        }
-          >
-            <FaPlus /> Add Student
-          </button>
-
+          
           <button
             className="blue-action-btn"
             onClick={() => navigate("/communication")}
