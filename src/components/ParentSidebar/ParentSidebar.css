@@ -6,6 +6,7 @@
   padding: 24px 18px;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .parent-logo-box {
@@ -43,6 +44,7 @@
   align-items: center;
   gap: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .parent-menu-link:hover,
@@ -67,4 +69,81 @@
 
 .parent-logout-btn:hover {
   background: #dc2626;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .parent-sidebar {
+    width: 220px;
+    padding: 22px 14px;
+  }
+
+  .parent-logo-box h2 {
+    font-size: 20px;
+  }
+
+  .parent-menu-link {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .parent-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .parent-logo-box {
+    margin-bottom: 14px;
+  }
+
+  .parent-logo-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+
+  .parent-logo-box h2 {
+    font-size: 20px;
+  }
+
+  .parent-logo-box p {
+    display: none;
+  }
+
+  .parent-sidebar-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 6px;
+  }
+
+  .parent-menu-link {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .parent-logout-btn {
+    margin-top: 10px;
+    width: 100%;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+  .parent-sidebar {
+    padding: 12px;
+  }
+
+  .parent-logo-box h2 {
+    font-size: 18px;
+  }
+
+  .parent-menu-link {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
 }

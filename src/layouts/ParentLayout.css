@@ -8,4 +8,41 @@
   flex: 1;
   padding: 24px;
   overflow-x: auto;
+  transition: 0.3s;
+}
+
+/* ==========================
+   TABLET
+========================== */
+
+@media (max-width: 1024px) {
+  .parent-main-content {
+    padding: 20px;
+  }
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+  .parent-layout {
+    flex-direction: column;
+  }
+
+  .parent-main-content {
+    width: 100%;
+    padding: 18px 15px;
+    overflow-x: hidden;
+  }
+}
+
+/* ==========================
+   SMALL MOBILE
+========================== */
+
+@media (max-width: 480px) {
+  .parent-main-content {
+    padding: 14px 12px;
+  }
 }

@@ -193,3 +193,133 @@
   margin-bottom: 12px;
   color: #374151;
 }
+/* ======================
+TABLET
+====================== */
+
+@media (max-width: 1200px) {
+
+  .approval-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+/* ======================
+TABLET
+====================== */
+
+@media (max-width: 1024px) {
+
+  .approvals-filter-card {
+    flex-wrap: wrap;
+  }
+
+}
+
+/* ======================
+MOBILE
+====================== */
+
+@media (max-width: 768px) {
+
+  .approval-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .approvals-filter-card {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .approvals-search,
+  .approvals-filter-card select {
+    width: 100%;
+  }
+
+  .approvals-table-card {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .approvals-table-card table {
+    min-width: 850px;
+  }
+
+  .approval-modal {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 18px;
+  }
+
+}
+
+/* ======================
+SMALL MOBILE
+====================== */
+
+@media (max-width: 480px) {
+
+  .approval-summary-card {
+    padding: 18px;
+  }
+
+  .approval-summary-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .approval-summary-card h3 {
+    font-size: 22px;
+  }
+
+  .approval-detail-box {
+    padding: 16px;
+  }
+
+}
+
+/* ======================
+ACTION BUTTONS
+====================== */
+
+@media (max-width: 768px) {
+
+  .approval-actions {
+    flex-wrap: wrap;
+  }
+
+  .approval-actions button {
+    flex: 1;
+    min-width: 40px;
+  }
+
+}
+
+/* ======================
+REQUEST USER
+====================== */
+
+@media (max-width: 480px) {
+
+  .request-user {
+    gap: 10px;
+  }
+
+  .request-avatar {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  .request-user h4 {
+    font-size: 13px;
+  }
+
+  .request-user p {
+    font-size: 11px;
+  }
+
+}

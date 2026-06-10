@@ -6,6 +6,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 18px;
   margin-bottom: 24px;
 }
 
@@ -34,6 +35,7 @@
   align-items: center;
   gap: 9px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .import-btn {
@@ -54,6 +56,8 @@
   display: inline-flex;
   gap: 8px;
   margin-bottom: 20px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .tab {
@@ -64,6 +68,7 @@
   background: transparent;
   color: #6b7280;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .tab.active {
@@ -90,6 +95,7 @@
   align-items: center;
   gap: 10px;
   color: #6b7280;
+  min-width: 220px;
 }
 
 .student-search input {
@@ -105,6 +111,7 @@
   padding: 12px 15px;
   outline: none;
   color: #374151;
+  min-width: 150px;
 }
 
 .table-card {
@@ -117,6 +124,7 @@
 
 table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
 }
 
@@ -156,6 +164,21 @@ td {
   display: grid;
   place-items: center;
   font-weight: 700;
+  flex-shrink: 0;
+}
+
+.student-photo,
+.photo-preview {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.photo-preview {
+  width: 85px;
+  height: 85px;
 }
 
 .status {
@@ -163,6 +186,7 @@ td {
   border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .active-status {
@@ -188,32 +212,41 @@ td {
   cursor: pointer;
   background: #f3f4f6;
   color: #3438d8;
+  flex-shrink: 0;
 }
 
 /* MODAL */
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.55);
-  display: grid;
-  place-items: center;
-  z-index: 1000;
+.user-page .modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.55) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 18px;
 }
 
+.user-page .student-modal,
 .student-modal {
-  width: 850px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 24px;
-  padding: 24px;
+  background: #ffffff !important;
+  width: 900px !important;
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  border-radius: 24px !important;
+  padding: 24px !important;
+  position: relative !important;
+  z-index: 1000000 !important;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 22px;
 }
 
@@ -229,6 +262,7 @@ td {
   height: 38px;
   border-radius: 12px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .photo-upload {
@@ -236,6 +270,7 @@ td {
   align-items: center;
   gap: 15px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .photo-circle {
@@ -247,8 +282,10 @@ td {
   display: grid;
   place-items: center;
   font-size: 28px;
+  flex-shrink: 0;
 }
 
+.upload-photo-btn,
 .photo-upload button {
   border: none;
   background: #3438d8;
@@ -256,6 +293,7 @@ td {
   padding: 11px 16px;
   border-radius: 12px;
   cursor: pointer;
+  font-weight: 700;
 }
 
 .student-modal h4 {
@@ -273,6 +311,7 @@ td {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .form-group.full {
@@ -293,11 +332,12 @@ td {
   padding: 13px 14px;
   outline: none;
   font-size: 14px;
+  width: 100%;
 }
 
 .form-group textarea {
   min-height: 90px;
-  resize: none;
+  resize: vertical;
 }
 
 .modal-actions {
@@ -325,68 +365,129 @@ td {
   background: #3438d8;
   color: white;
 }
-.student-photo,
-.photo-preview {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .page-title-row {
+    align-items: flex-start;
+  }
+
+  .filter-card {
+    flex-wrap: wrap;
+  }
+
+  .student-search {
+    flex-basis: 100%;
+  }
 }
 
-.photo-preview {
-  width: 85px;
-  height: 85px;
+/* MOBILE */
+@media (max-width: 768px) {
+  .page-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-title-row h2 {
+    font-size: 24px;
+  }
+
+  .page-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .import-btn,
+  .add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tabs {
+    width: 100%;
+    display: flex;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    padding: 11px 18px;
+  }
+
+  .filter-card {
+    flex-direction: column;
+  }
+
+  .student-search,
+  .filter-card select {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .table-card {
+    padding: 14px;
+  }
+
+  table {
+    min-width: 850px;
+  }
+
+  .user-page .student-modal,
+  .student-modal {
+    width: 95vw !important;
+    padding: 18px !important;
+    border-radius: 18px !important;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+  }
 }
 
-.upload-photo-btn {
-  background: #3438d8;
-  color: white;
-  padding: 11px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-}
-.student-photo,
-.photo-preview {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-}
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+  .page-title-row h2 {
+    font-size: 21px;
+  }
 
-.photo-preview {
-  width: 85px;
-  height: 85px;
-}
+  .page-title-row p {
+    font-size: 13px;
+  }
 
-.upload-photo-btn {
-  background: #3438d8;
-  color: white;
-  padding: 11px 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-}
-.user-page .modal-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(0, 0, 0, 0.55) !important;
-  z-index: 999999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
+  .tab {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
 
-.user-page .student-modal {
-  background: #ffffff !important;
-  width: 900px !important;
-  max-width: 95vw !important;
-  max-height: 90vh !important;
-  overflow-y: auto !important;
-  border-radius: 24px !important;
-  padding: 24px !important;
-  position: relative !important;
-  z-index: 1000000 !important;
+  .table-card {
+    border-radius: 16px;
+    padding: 10px;
+  }
+
+  th,
+  td {
+    padding: 13px;
+    font-size: 13px;
+  }
+
+  .modal-header h3 {
+    font-size: 20px;
+  }
+
+  .photo-upload {
+    justify-content: center;
+    text-align: center;
+  }
 }

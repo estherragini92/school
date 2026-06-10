@@ -220,13 +220,7 @@ if (currentUser?.role === "parent") {
         </div>
       </div>
 
-      <button
-        className="floating-notification"
-        onClick={() => setShowNotifications(!showNotifications)}
-      >
-        <FaBell />
-      </button>
-
+      
       {showNotifications && (
         <div className="notification-dropdown">
           <h4>Notifications</h4>

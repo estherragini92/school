@@ -254,3 +254,131 @@
   border-radius: 10px;
   margin-bottom: 8px;
 }
+/* =====================
+TABLET
+===================== */
+
+@media (max-width: 1200px) {
+
+  .teacher-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .teacher-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* =====================
+MOBILE
+===================== */
+
+@media (max-width: 768px) {
+
+  .teacher-dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .teacher-dashboard-header h2 {
+    font-size: 28px;
+  }
+
+  .teacher-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-stat-card {
+    padding: 20px;
+  }
+
+  .teacher-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .teacher-card h3 {
+    font-size: 20px;
+  }
+
+  .teacher-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .schedule-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .schedule-time {
+    min-width: auto;
+  }
+
+  .teacher-activity-item,
+  .teacher-notification-item,
+  .teacher-insight {
+    align-items: flex-start;
+  }
+
+}
+
+/* =====================
+SMALL MOBILE
+===================== */
+
+@media (max-width: 480px) {
+
+  .teacher-dashboard-header h2 {
+    font-size: 24px;
+  }
+
+  .teacher-stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .teacher-stat-card h3 {
+    font-size: 24px;
+  }
+
+  .teacher-insight h4 {
+    font-size: 18px;
+  }
+
+  .schedule-item h4 {
+    font-size: 15px;
+  }
+
+  .teacher-card {
+    padding: 16px;
+  }
+
+}
+
+/* =====================
+NOTIFICATION DROPDOWN
+===================== */
+
+@media (max-width: 768px) {
+
+  .teacher-notification-dropdown {
+    width: 280px;
+    right: -20px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .teacher-notification-dropdown {
+    width: 240px;
+    right: -50px;
+  }
+
+}

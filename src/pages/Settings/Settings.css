@@ -275,3 +275,112 @@
   background: #fee2e2;
   color: #dc2626;
 }
+/* ======================
+TABLET
+====================== */
+
+@media (max-width: 1200px) {
+  .roles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .integration-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .settings-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .settings-tabs button {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+/* ======================
+MOBILE
+====================== */
+
+@media (max-width: 768px) {
+  .save-settings-btn,
+  .upload-logo-btn,
+  .add-year-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .settings-card,
+  .integration-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .school-logo-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .toggle-row {
+    gap: 15px;
+  }
+
+  .year-modal {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* ======================
+SMALL MOBILE
+====================== */
+
+@media (max-width: 480px) {
+  .settings-tabs button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .settings-card h3,
+  .integration-card h3 {
+    font-size: 19px;
+  }
+
+  .school-logo,
+  .school-logo-img {
+    width: 75px;
+    height: 75px;
+  }
+
+  .role-header h4 {
+    font-size: 16px;
+  }
+
+  .toggle-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

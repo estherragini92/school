@@ -7,6 +7,7 @@
   margin-left: 270px;
   min-height: 100vh;
   background: #eefafa;
+  transition: 0.3s;
 }
 
 .page-content {
@@ -16,4 +17,41 @@
   margin: 0 auto;
   padding: 28px 30px 45px;
   background: #eefafa;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 220px;
+  }
+
+  .page-content {
+    max-width: 100%;
+    padding: 24px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .page-content {
+    min-height: auto;
+    padding: 18px 15px 35px;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+  .page-content {
+    padding: 14px 12px 30px;
+  }
 }

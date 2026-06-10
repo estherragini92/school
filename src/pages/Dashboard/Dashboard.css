@@ -2,66 +2,85 @@
   width: 100%;
 }
 
-.dashboard-head {
+.dashboard-head,
+.dashboard-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 28px;
+  gap: 20px;
 }
 
-.dashboard-head h2 {
-  font-size: 28px;
+.dashboard-head h2,
+.dashboard-title-row h2 {
+  font-size: 32px;
   color: #000;
 }
 
-.dashboard-head p {
+.dashboard-head p,
+.dashboard-title-row p {
   font-size: 16px;
-  color: #111827;
+  color: #555;
   margin-top: 4px;
 }
 
-.dashboard-buttons {
+.dashboard-buttons,
+.dashboard-actions,
+.approval-mini-actions {
   display: flex;
+  align-items: center;
   gap: 14px;
 }
 
 .white-btn,
-.blue-btn {
+.blue-btn,
+.white-action-btn,
+.blue-action-btn {
   border: none;
-  border-radius: 22px;
-  padding: 12px 22px;
+  border-radius: 20px;
+  padding: 13px 22px;
   font-size: 16px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
 }
 
-.white-btn {
+.white-btn,
+.white-action-btn {
   background: white;
   color: #111827;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
 }
 
-.blue-btn {
-  background: #3036d6;
+.blue-btn,
+.blue-action-btn {
+  background: #3438d8;
   color: white;
 }
 
-.figma-stats {
+.figma-stats,
+.dashboard-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin-bottom: 30px;
 }
 
-.figma-stat-card {
+.figma-stat-card,
+.dashboard-stat-card {
   position: relative;
-  background: #eeeeff;
-  border-left: 5px solid #4b3df2;
-  border-radius: 20px;
-  padding: 22px;
+  background: white;
+  border-left: 7px solid #3438d8;
+  border-radius: 22px;
+  padding: 26px;
   min-height: 150px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.figma-stat-card {
+  background: #eeeeff;
 }
 
 .figma-stat-card.green-bg {
@@ -80,6 +99,12 @@
   margin-bottom: 10px;
 }
 
+.dashboard-stat-card svg {
+  color: #3438d8;
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
 .growth {
   position: absolute;
   right: 16px;
@@ -91,14 +116,16 @@
   font-size: 13px;
 }
 
-.figma-stat-card h3 {
+.figma-stat-card h3,
+.dashboard-stat-card h3 {
   font-size: 34px;
   color: #000;
 }
 
-.figma-stat-card p {
+.figma-stat-card p,
+.dashboard-stat-card p {
   font-size: 15px;
-  color: #111827;
+  color: #555;
 }
 
 .chart-grid {
@@ -108,63 +135,61 @@
   margin-bottom: 32px;
 }
 
-.figma-card {
+.figma-card,
+.dashboard-card,
+.figma-small-card {
   background: white;
-  border-radius: 30px;
-  padding: 28px;
-  min-height: 360px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  border-radius: 28px;
+  padding: 26px;
+  min-height: 330px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
 }
 
-.figma-card h3 {
-  font-size: 23px;
+.figma-card {
+  min-height: 360px;
+}
+
+.figma-card h3,
+.dashboard-card h3,
+.figma-small-card h3 {
+  font-size: 24px;
   color: #000;
 }
 
-.figma-card > p {
-  color: #8b8b8b;
+.figma-card > p,
+.dashboard-card > p,
+.figma-small-card > p {
+  color: #777;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .chart-box {
   background: white;
   border-radius: 20px;
+  width: 100%;
+  overflow-x: auto;
 }
 
-.bottom-dashboard-grid {
+.bottom-dashboard-grid,
+.dashboard-bottom-grid {
   display: grid;
   grid-template-columns: 1.05fr 1fr 1fr;
   gap: 24px;
 }
 
-.figma-small-card {
-  background: white;
-  border-radius: 30px;
-  padding: 24px;
-  min-height: 330px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-
-.figma-small-card h3 {
-  font-size: 23px;
-  color: #000;
-}
-
-.figma-small-card > p {
-  color: #8b8b8b;
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-
-.activity-row {
+.activity-row,
+.activity-item,
+.alert-row,
+.alert-item {
   display: flex;
-  gap: 13px;
+  gap: 14px;
   align-items: center;
   margin-bottom: 16px;
 }
 
-.round-icon {
+.round-icon,
+.activity-dot {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -173,33 +198,35 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  font-weight: 900;
 }
 
 .activity-row h4,
 .alert-row h4,
-.approval-box h4 {
-  font-size: 15px;
+.approval-box h4,
+.approval-mini-card h4 {
+  font-size: 16px;
   color: #111827;
 }
 
 .activity-row p,
 .alert-row p,
-.approval-box p {
+.approval-box p,
+.approval-mini-card p {
   font-size: 13px;
   color: #888;
 }
 
-.alert-row {
+.alert-row,
+.alert-item {
   background: #f4ffff;
   border: 1px solid #d7eeee;
   border-radius: 18px;
   padding: 14px;
-  display: flex;
-  gap: 14px;
-  margin-bottom: 13px;
 }
 
-.alert-row svg {
+.alert-row svg,
+.alert-item svg {
   color: #3036d6;
   margin-top: 4px;
 }
@@ -209,234 +236,54 @@
   border-color: #fde68a;
 }
 
-.alert-row.warning svg {
+.alert-row.warning svg,
+.alert-item svg {
   color: #f59e0b;
 }
-.approval-box {
+
+.approval-box,
+.approval-mini-card {
   background: #f8ffff;
   border: 1px solid #d7eeee;
   border-radius: 18px;
-  padding: 14px 16px;
+  padding: 16px;
   margin-bottom: 14px;
 }
 
-.approval-box h4 {
-  font-size: 16px;
-  color: #111827;
-  margin-bottom: 4px;
+.approval-box p,
+.approval-mini-card p {
+  margin: 4px 0 12px;
 }
 
-.approval-box p {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 12px;
-}
-
-.approval-actions {
+.approval-actions,
+.approval-mini-actions {
   display: flex;
   gap: 12px;
 }
 
 .approve-btn,
-.reject-btn {
+.reject-btn,
+.approval-mini-actions button {
   flex: 1;
-  height: 34px;
+  min-height: 34px;
   border-radius: 999px;
   font-weight: 700;
   border: none;
   cursor: pointer;
+  padding: 9px 12px;
 }
 
-.approve-btn {
-  background: #059669;
-  color: white;
-}
-
-.reject-btn {
-  background: #ffffff;
-  color: #ef4444;
-  border: 1px solid #fecaca;
-}
-
-@media (max-width: 1200px) {
-  .figma-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .chart-grid,
-  .bottom-dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.dashboard-page {
-  width: 100%;
-}
-
-.dashboard-title-row,
-.dashboard-actions,
-.approval-mini-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.dashboard-title-row {
-  margin-bottom: 28px;
-}
-
-.dashboard-title-row h2 {
-  font-size: 32px;
-}
-
-.dashboard-title-row p {
-  color: #555;
-  margin-top: 5px;
-}
-
-.dashboard-actions {
-  gap: 14px;
-}
-
-.white-action-btn,
-.blue-action-btn {
-  border: none;
-  border-radius: 20px;
-  padding: 13px 22px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.white-action-btn {
-  background: white;
-  color: #111;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
-}
-
-.blue-action-btn {
-  background: #3438d8;
-  color: white;
-}
-
-.dashboard-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-bottom: 30px;
-}
-
-.dashboard-stat-card {
-  background: white;
-  border-radius: 22px;
-  padding: 28px;
-  border-left: 7px solid #3438d8;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-}
-
-.dashboard-stat-card svg {
-  color: #3438d8;
-  font-size: 28px;
-  margin-bottom: 15px;
-}
-
-.dashboard-stat-card h3 {
-  font-size: 34px;
-}
-
-.dashboard-stat-card p {
-  color: #555;
-}
-
-.dashboard-bottom-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 26px;
-}
-
-.dashboard-card {
-  background: white;
-  border-radius: 26px;
-  padding: 26px;
-  min-height: 330px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
-}
-
-.dashboard-card h3 {
-  font-size: 25px;
-}
-
-.dashboard-card > p {
-  color: #777;
-  margin-bottom: 18px;
-}
-
-.activity-item,
-.alert-item {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.activity-dot {
-  background: #d9fff0;
-  color: #059669;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-}
-
-.alert-item {
-  background: #f4fbff;
-  border: 1px solid #d9efff;
-  padding: 15px;
-  border-radius: 16px;
-}
-
-.alert-item svg {
-  color: #f59e0b;
-}
-
-.approval-mini-card {
-  background: #f8ffff;
-  border: 1px solid #d5eeee;
-  border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.approval-mini-card h4 {
-  font-size: 18px;
-}
-
-.approval-mini-card p {
-  color: #777;
-  margin: 4px 0 12px;
-}
-
-.approval-mini-actions button {
-  width: 48%;
-  border: none;
-  padding: 10px;
-  border-radius: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
+.approve-btn,
 .approval-mini-actions button:first-child {
   background: #059669;
   color: white;
 }
 
+.reject-btn,
 .approval-mini-actions button:last-child {
-  background: white;
+  background: #ffffff;
   color: #ef4444;
-  border: 1px solid #fca5a5;
+  border: 1px solid #fecaca;
 }
 
 .floating-notification {
@@ -458,6 +305,8 @@
   right: 34px;
   top: 165px;
   width: 300px;
+  max-height: 350px;
+  overflow-y: auto;
   background: white;
   border-radius: 18px;
   padding: 18px;
@@ -468,4 +317,102 @@
 .notification-dropdown p {
   padding: 10px 0;
   border-bottom: 1px solid #eee;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .figma-stats,
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-grid,
+  .bottom-dashboard-grid,
+  .dashboard-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-head,
+  .dashboard-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-buttons,
+  .dashboard-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .white-btn,
+  .blue-btn,
+  .white-action-btn,
+  .blue-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .figma-stats,
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .figma-card,
+  .dashboard-card,
+  .figma-small-card {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .figma-stat-card h3,
+  .dashboard-stat-card h3 {
+    font-size: 28px;
+  }
+
+  .floating-notification {
+    right: 18px;
+    top: 95px;
+  }
+
+  .notification-dropdown {
+    right: 18px;
+    top: 145px;
+    width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-head h2,
+  .dashboard-title-row h2 {
+    font-size: 24px;
+  }
+
+  .dashboard-head p,
+  .dashboard-title-row p {
+    font-size: 14px;
+  }
+
+  .figma-stat-card,
+  .dashboard-stat-card {
+    padding: 20px;
+  }
+
+  .activity-row,
+  .activity-item,
+  .alert-row,
+  .alert-item {
+    align-items: flex-start;
+  }
+
+  .approval-actions,
+  .approval-mini-actions {
+    flex-direction: column;
+  }
+
+  .notification-dropdown {
+    right: 10px;
+    width: 260px;
+  }
 }

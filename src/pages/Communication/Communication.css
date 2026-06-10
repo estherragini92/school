@@ -2,6 +2,8 @@
   width: 100%;
 }
 
+/* TABS */
+
 .communication-tabs {
   background: white;
   padding: 8px;
@@ -9,6 +11,8 @@
   display: inline-flex;
   gap: 8px;
   margin-bottom: 22px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .communication-tabs button {
@@ -19,6 +23,7 @@
   background: transparent;
   color: #6b7280;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .communication-tabs button.active {
@@ -26,14 +31,38 @@
   color: white;
 }
 
+/* CARDS */
+
 .communication-card,
 .broadcast-form-card,
-.broadcast-stats-card {
+.broadcast-stats-card,
+.broadcast-history-card {
   background: white;
   border-radius: 22px;
   padding: 22px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 25px rgba(0,0,0,.06);
 }
+
+/* SEARCH */
+
+.comm-search-card {
+  background: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.comm-search-card input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+/* ANNOUNCEMENT */
 
 .announcement-title {
   display: flex;
@@ -71,9 +100,11 @@
   color: #1d4ed8;
 }
 
+/* NOTIFICATIONS */
+
 .notification-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 20px;
 }
 
@@ -84,7 +115,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 25px rgba(0,0,0,.06);
 }
 
 .notification-icon {
@@ -96,6 +127,7 @@
   display: grid;
   place-items: center;
   font-size: 22px;
+  flex-shrink: 0;
 }
 
 .notification-card h4 {
@@ -107,6 +139,8 @@
   color: #6b7280;
   font-size: 13px;
 }
+
+/* BROADCAST */
 
 .broadcast-layout {
   display: grid;
@@ -125,6 +159,7 @@
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .broadcast-type button {
@@ -182,40 +217,9 @@
 .broadcast-stat h2 {
   color: #111827;
   margin-top: 5px;
-
-}
-.comm-search-card {
-  background: white;
-  padding: 14px 18px;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 22px;
 }
 
-.comm-search-card input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-}
-
-.communication-modal {
-  width: 760px;
-  max-width: 94%;
-  background: white;
-  border-radius: 24px;
-  padding: 24px;
-}
-
-.broadcast-history-card {
-  grid-column: 1 / -1;
-  background: white;
-  border-radius: 22px;
-  padding: 22px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-}
+/* HISTORY */
 
 .broadcast-history-item {
   display: flex;
@@ -253,26 +257,18 @@
   background: #fee2e2;
   color: #dc2626;
 }
-.communication-modal {
-  position: relative;
-  z-index: 1001;
-}
 
-.communication-modal input,
-.communication-modal select,
-.communication-modal textarea {
-  background: white;
-}
+/* MODAL */
 
-.communication-modal textarea {
-  min-height: 110px;
-}
 .communication-modal {
   width: 760px;
   max-width: 94%;
+  max-height: 90vh;
+  overflow-y: auto;
   background: white;
   border-radius: 24px;
   padding: 24px;
+  position: relative;
   z-index: 9999;
 }
 
@@ -285,4 +281,213 @@
 
 .communication-modal textarea {
   min-height: 110px;
+}
+
+/* ===================
+TABLET
+=================== */
+
+@media (max-width: 1024px) {
+
+  .notification-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .broadcast-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================
+MOBILE
+=================== */
+
+@media (max-width:768px) {
+
+  .communication-tabs {
+    width: 100%;
+  }
+
+  .communication-tabs button {
+    flex: 0 0 auto;
+    padding: 11px 18px;
+  }
+
+  .notification-card {
+    align-items: flex-start;
+  }
+
+  .broadcast-type {
+    flex-direction: column;
+  }
+
+  .broadcast-type button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .send-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .broadcast-history-item {
+    flex-direction: column;
+  }
+
+  .communication-modal {
+    width: 95%;
+    padding: 18px;
+  }
+}
+
+/* ===================
+SMALL MOBILE
+=================== */
+
+@media (max-width:480px) {
+
+  .communication-card,
+  .broadcast-form-card,
+  .broadcast-stats-card,
+  .broadcast-history-card {
+    padding: 18px;
+  }
+
+  .broadcast-stat {
+    padding: 15px;
+  }
+
+  .broadcast-stat h2 {
+    font-size: 22px;
+  }
+
+  .notification-card {
+    padding: 16px;
+  }
+
+  .notification-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .communication-modal {
+    border-radius: 18px;
+  }
+}
+/* ===== MODAL OVERLAY ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+/* ===== COMMUNICATION MODAL ===== */
+.communication-modal {
+  width: 760px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+}
+
+.communication-modal h3 {
+  margin-bottom: 20px;
+}
+
+.communication-modal input,
+.communication-modal select,
+.communication-modal textarea {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px;
+  outline: none;
+  background: white;
+}
+
+.communication-modal textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* FORM GRID */
+.communication-modal .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.communication-modal .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.communication-modal .form-group.full {
+  grid-column: 1 / -1;
+}
+
+/* BUTTONS */
+.communication-modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ===== TABLET ===== */
+@media (max-width: 768px) {
+
+  .modal-overlay {
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .communication-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 95vh;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .communication-modal .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .communication-modal .form-group.full {
+    grid-column: auto;
+  }
+
+  .communication-modal .modal-actions {
+    flex-direction: column;
+  }
+
+  .communication-modal .modal-actions button {
+    width: 100%;
+  }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+
+  .communication-modal {
+    padding: 15px;
+  }
+
+  .communication-modal h3 {
+    font-size: 20px;
+  }
+
 }

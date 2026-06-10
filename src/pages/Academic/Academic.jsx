@@ -581,7 +581,7 @@ useEffect(() => {
                 <div className="time-cell">{time}</div>
 
                 {days.map((day) => {
-                  if (time === "10:00 AM - 10:30 AM") {
+                 if (time === "10:00 AM - 10:30 AM" && day === "Monday") {
                     return (
                       <div className="period-card lunch" key={`${day}-${time}`}>
                         <h4>BREAK</h4>
@@ -589,6 +589,9 @@ useEffect(() => {
                     );
                   }
 
+                  if (time === "10:00 AM - 10:30 AM" && day !== "Monday") {
+                    return null;
+                  }
                   const period = getPeriod(day, time);
 
                   return period ? (

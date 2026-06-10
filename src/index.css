@@ -322,3 +322,137 @@ tbody tr:hover {
     min-width: 700px;
   }
 }
+
+/* ==========================
+   EXTRA PROJECT RESPONSIVE FIXES
+========================== */
+
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    position: relative !important;
+  }
+
+  .main-content {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .header {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .search-box {
+    width: 100% !important;
+  }
+
+  .dashboard-grid,
+  .parent-stats-grid,
+  .parent-dashboard-grid,
+  .class-grid,
+  .fee-summary-grid,
+  .reports-grid,
+  .settings-grid,
+  .child-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .filter-card,
+  .academic-filter,
+  .fees-filter-card,
+  .parent-dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .student-search,
+  .academic-search,
+  .fees-search {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-right {
+    justify-content: space-between;
+  }
+
+  .dashboard-grid,
+  .parent-stats-grid,
+  .parent-dashboard-grid,
+  .class-grid,
+  .fee-summary-grid,
+  .reports-grid,
+  .settings-grid,
+  .child-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .tabs,
+  .academic-tabs,
+  .fees-tabs {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .tabs button,
+  .academic-tabs button,
+  .fees-tabs button {
+    white-space: nowrap;
+  }
+
+  .table-card,
+  .academic-table-card,
+  .fees-table-card,
+  .document-table-card,
+  .approvals-table-card {
+    overflow-x: auto;
+  }
+
+  .add-btn,
+  .import-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  .page-title-row h2 {
+    font-size: 21px;
+  }
+
+  .profile-box h4,
+  .profile-box p {
+    display: none;
+  }
+
+  .notification-dropdown {
+    right: -40px;
+    width: 280px;
+  }
+}

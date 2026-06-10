@@ -5,12 +5,14 @@
 /* TABS */
 .academic-tabs {
   width: fit-content;
+  max-width: 100%;
   background: #dff3f1;
   border-radius: 22px;
   padding: 7px;
   display: flex;
   gap: 6px;
   margin-bottom: 30px;
+  overflow-x: auto;
 }
 
 .academic-tabs button {
@@ -25,6 +27,7 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .academic-tabs button.active {
@@ -108,14 +111,22 @@
   font-size: 20px;
 }
 
-.class-actions svg:first-child {
-  color: #111827;
+.class-actions svg,
+.table-actions svg,
+.exam-actions svg {
   cursor: pointer;
 }
 
-.class-actions svg:last-child {
+.class-actions svg:first-child,
+.table-actions svg:first-child,
+.exam-actions svg:first-child {
+  color: #111827;
+}
+
+.class-actions svg:last-child,
+.table-actions svg:last-child,
+.exam-actions svg:last-child {
   color: #ef4444;
-  cursor: pointer;
 }
 
 .class-card h3 {
@@ -155,11 +166,13 @@
 .academic-table-card {
   background: white;
   overflow-x: auto;
+  border-radius: 18px;
 }
 
 .academic-table-card table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 760px;
 }
 
 .academic-table-card thead {
@@ -203,146 +216,161 @@
   font-size: 18px;
 }
 
-.table-actions svg:first-child {
-  color: #111827;
-  cursor: pointer;
-}
-
-.table-actions svg:last-child {
-  color: #ef4444;
-  cursor: pointer;
-}
 /* TIMETABLE */
-
-.timetable-card{
-    background:white;
-    border-radius:24px;
-    padding:25px;
-    overflow-x:auto;
+.timetable-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px;
+  overflow-x: auto;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
 }
 
-.timetable-grid{
-    min-width:1200px;
-    display:grid;
-    grid-template-columns:170px repeat(5,1fr);
-    gap:15px;
+.timetable-grid {
+  min-width: 1050px;
+  display: grid;
+  grid-template-columns: 110px repeat(5, 1fr);
+  gap: 14px;
 }
 
-.time-header,
-.day-header{
-    background:#f8fafc;
-    padding:18px;
-    border-radius:15px;
-    text-align:center;
-    font-size:15px;
-    font-weight:800;
-    color:#64748b;
+.time-head,
+.day-head {
+  font-size: 14px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  padding: 8px;
 }
 
-.time-cell{
-    background:#f8fafc;
-    border-radius:15px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    font-weight:700;
-    color:#64748b;
-    min-height:120px;
+.time-row {
+  display: contents;
 }
 
-.period-card{
-    background:white;
-    border-radius:18px;
-    padding:16px;
-    min-height:120px;
-    border-left:5px solid #6366f1;
-    box-shadow:0 3px 10px rgba(0,0,0,.08);
+.time-cell {
+  background: transparent;
+  border-radius: 0;
+  min-height: 95px;
+  padding-top: 28px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #94a3b8;
+  line-height: 22px;
 }
 
-.period-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:12px;
+.period-card {
+  min-height: 96px;
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-left: 4px solid #3b82f6;
+  box-shadow: none;
 }
 
-.period-top h4{
-    margin:0;
-    font-size:16px;
-    color:#111827;
+.period-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
 }
 
-.period-actions{
-    display:flex;
-    gap:10px;
-    cursor:pointer;
+.period-top h4,
+.period-card h4 {
+  margin: 0;
+  font-size: 15px;
+  color: #0f172a;
 }
 
-.period-card p{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin:8px 0;
-    color:#64748b;
-    font-size:14px;
+.period-actions {
+  display: flex;
+  gap: 8px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.break-card{
-    background:#eef2ff;
-    border-radius:18px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:800;
-    color:#6366f1;
-    letter-spacing:5px;
-    min-height:120px;
+.period-card p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 6px 0;
+  color: #64748b;
+  font-size: 13px;
 }
 
-.empty-period{
-    border:2px dashed #cbd5e1;
-    background:white;
-    border-radius:18px;
-    color:#94a3b8;
-    font-weight:700;
-    cursor:pointer;
-    min-height:120px;
+.period-card.blue {
+  background: #eff6ff;
+  border-left-color: #3b82f6;
 }
 
-.empty-period:hover{
-    border-color:#6366f1;
-    color:#6366f1;
+.period-card.green {
+  background: #ecfdf5;
+  border-left-color: #22c55e;
 }
 
-.period-card.blue{
-    border-left-color:#3b82f6;
+.period-card.purple {
+  background: #f5f3ff;
+  border-left-color: #8b5cf6;
 }
 
-.period-card.green{
-    border-left-color:#22c55e;
+.period-card.orange {
+  background: #fff7ed;
+  border-left-color: #f97316;
 }
 
-.period-card.purple{
-    border-left-color:#a855f7;
+.period-card.red {
+  background: #fef2f2;
+  border-left-color: #ef4444;
 }
 
-.period-card.orange{
-    border-left-color:#f59e0b;
+.period-card.lunch,
+.break-card {
+  grid-column: span 5;
+  min-height: 56px;
+  background: #eef2ff;
+  border-left: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 6px;
+  color: #94a3b8;
+  font-weight: 800;
 }
 
-.period-card.red{
-    border-left-color:#ef4444;
+.period-card.lunch h4 {
+  margin: 0;
+  color: #94a3b8;
 }
 
-.period-warning{
-    margin-top:10px;
-    background:#fee2e2;
-    color:#dc2626;
-    padding:8px;
-    border-radius:10px;
-    font-size:12px;
-    font-weight:700;
+.add-period,
+.empty-period {
+  min-height: 96px;
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  border-left: 2px dashed #cbd5e1;
+}
+
+.add-period:hover,
+.empty-period:hover {
+  background: #f1f5f9;
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.period-warning {
+  margin-top: 8px;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 /* EXAMS */
@@ -418,21 +446,13 @@
   font-size: 20px;
 }
 
-.exam-actions svg:first-child {
-  color: #111827;
-  cursor: pointer;
-}
-
-.exam-actions svg:last-child {
-  color: #ef4444;
-  cursor: pointer;
-}
-
 /* MODAL */
 .academic-modal {
   background: #ffffff;
   width: 760px;
   max-width: 94%;
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
@@ -453,6 +473,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .form-group.full {
@@ -489,16 +510,16 @@
   .class-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .timetable-grid {
+    min-width: 1000px;
+  }
 }
 
-@media (max-width: 768px) {
-  .academic-tabs {
-    width: 100%;
-    overflow-x: auto;
-  }
-
+@media (max-width: 992px) {
   .academic-filter {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .academic-search,
@@ -507,11 +528,43 @@
   }
 
   .class-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .academic-modal {
+    width: 92%;
+  }
+}
+
+@media (max-width: 768px) {
+  .academic-tabs {
+    width: 100%;
+    border-radius: 16px;
+    padding: 6px;
+  }
+
+  .academic-tabs button {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .class-grid {
     grid-template-columns: 1fr;
+  }
+
+  .class-card {
+    border-radius: 20px;
+  }
+
+  .class-card span {
+    position: static;
+    display: inline-block;
+    margin-top: 10px;
   }
 
   .exam-card {
     grid-template-columns: 1fr;
+    padding: 20px;
   }
 
   .form-grid {
@@ -520,5 +573,69 @@
 
   .form-group.full {
     grid-column: auto;
+  }
+
+  .timetable-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .timetable-grid {
+    min-width: 900px;
+    grid-template-columns: 95px repeat(5, 160px);
+    gap: 10px;
+  }
+
+  .period-card,
+  .add-period,
+  .empty-period {
+    min-height: 90px;
+    padding: 12px;
+  }
+
+  .period-card h4,
+  .period-top h4 {
+    font-size: 14px;
+  }
+
+  .period-card p {
+    font-size: 12px;
+  }
+
+  .academic-modal {
+    width: 95%;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .academic-tabs button {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  .academic-filter {
+    gap: 12px;
+  }
+
+  .class-card h3 {
+    font-size: 19px;
+  }
+
+  .academic-table-card th,
+  .academic-table-card td {
+    padding: 14px;
+  }
+
+  .exam-card h3 {
+    font-size: 16px;
+  }
+
+  .academic-modal h3 {
+    font-size: 19px;
+  }
+
+  .timetable-card {
+    padding: 14px;
   }
 }

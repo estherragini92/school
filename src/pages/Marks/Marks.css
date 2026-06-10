@@ -350,3 +350,153 @@
   min-width: 240px;
   max-width: 260px;
 }
+/* ======================
+RESPONSIVE
+====================== */
+
+@media (max-width: 1200px) {
+
+  .marks-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .marks-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .top-performers-card {
+    max-width: 100%;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .marks-filter-card {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .marks-search,
+  .marks-filter-card select {
+    width: 100%;
+  }
+
+  .marks-table-card {
+    overflow-x: auto;
+  }
+
+  .marks-table-card table {
+    min-width: 850px;
+  }
+
+  .marks-summary-card {
+    padding: 18px;
+  }
+
+  .marks-summary-card h3 {
+    font-size: 22px;
+  }
+
+  .marks-modal {
+    width: 95%;
+    padding: 18px;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .marks-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performer-item {
+    padding: 12px;
+  }
+
+  .marks-actions {
+    flex-wrap: wrap;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .mark-student {
+    gap: 8px;
+  }
+
+  .mark-avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+
+  .mark-progress-track {
+    width: 70px;
+  }
+
+  .performer-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .performer-rank {
+    width: 32px;
+    height: 32px;
+  }
+
+  .marks-detail-box {
+    padding: 16px;
+  }
+
+}
+
+/* ======================
+OVERFLOW FIX
+====================== */
+
+.marks-page,
+.assignments-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.marks-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 260px;
+  gap: 22px;
+}
+
+.marks-main,
+.marks-table-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.marks-table-card {
+  overflow-x: auto;
+}
+
+.marks-table-card table {
+  min-width: 850px;
+}
+
+.top-performers-card {
+  min-width: 240px;
+  max-width: 260px;
+}
+
+@media (max-width: 1200px) {
+
+  .marks-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .top-performers-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+}
